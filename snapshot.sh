@@ -9,14 +9,14 @@ if [ -z prevy ]
 then
 	presm=$(date +"%m")
 	prevm=$(( presm - 1 ))
-	ls /.snapshots/ | grep -o "${prevm}" > del.txt
-	for r in $(ls /.snapshots/ | grep -o "${prevm}" > del.txt)
+	ls /.snapshots/ | grep -o ".*[${prevm}].*" > del.txt
+	for r in $(ls /.snapshots/ | grep -o ".*[${prevm}].*")
 	do
 		#echo $passwd | sudo -S rm -rf /.snapshots/`$r`
 		echo $passwd | sudo -S btrfs subvolume delete /.snapshot/`$r`
 	done
 else
-	for r in $(ls /.snapshots/ | grep -o "${prevy}" > del.txt)
+	for r in $(ls /.snapshots/ | grep -o ".*[${prev}].*" > del.txt)
         do
                 #echo $passwd | sudo -S rm -rf /.snapshots/`$r`
 
@@ -24,7 +24,10 @@ else
         done
 fi
 
-echo "Creating snapshot root-$(date +"%Y-%m-%d")"
+#echo "Creating snapshot root-$(date +"%Y-%m-%d")"
 
 echo $passwd | sudo -S btrfs subvol snapshot / /.snapshots/root-$(date +"%Y-%m-%d")
 
+#echo "Creating snapshot home-$(date +"%Y-%m-%d")"
+
+echo $passwd | sudo -S btrfs subvol snapshot /home /.snapshots/home-$(date +"%Y-%m-%d")
