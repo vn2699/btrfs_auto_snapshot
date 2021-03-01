@@ -5,22 +5,25 @@ passwd="Vnair98#"
 presy=$(date +"%Y")
 prev=$(( presy - 1 ))
 prevy=$(ls /.snapshots/ | grep -o "${prev}")
-if [ -z prevy ]
+#echo $prevy
+if [ -z $prevy ]
 then
+	#echo "In Month"
 	presm=$(date +"%m")
 	prevm=$(( presm - 1 ))
 	ls /.snapshots/ | grep -o ".*[${prevm}].*" > del.txt
 	for r in $(ls /.snapshots/ | grep -o ".*[${prevm}].*")
 	do
-		#echo $passwd | sudo -S rm -rf /.snapshots/`$r`
-		echo $passwd | sudo -S btrfs subvolume delete /.snapshot/`$r`
+		#echo $passwd | sudo -S rm -r /.snapshots/`$r`
+		#echo $r
+		echo $passwd | sudo -S btrfs subvolume delete /.snapshots/${r}/
 	done
 else
 	for r in $(ls /.snapshots/ | grep -o ".*[${prev}].*" > del.txt)
         do
-                #echo $passwd | sudo -S rm -rf /.snapshots/`$r`
+                #echo $passwd | sudo -S rm -r /.snapshots/`$r`
 
-		echo $passwd | sudo -S btrfs subvolume delete /.snapshot/`$r`
+		echo $passwd | sudo -S btrfs subvolume delete /.snapshots/${r}/
         done
 fi
 
